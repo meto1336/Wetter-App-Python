@@ -3,12 +3,13 @@ from deep_translator import GoogleTranslator
 import requests
 import urllib
 import urllib.request
-import io
+from io import BytesIO
 from PIL import Image, ImageTk
 import time
 import customtkinter
 import tkinter as tk
 import tkinter.messagebox
+from urllib.request import urlopen
 
 customtkinter.set_appearance_mode("system") 
 customtkinter.set_default_color_theme("blue")  
@@ -26,9 +27,6 @@ def get_weather_information(city):
         description = data['weather'][0]['description']
         country = data['sys']['country']
         image_link = "https://openweathermap.org/img/wn/" + icon + ".png"
-        #image_link = "https://upload.wikimedia.org/wikipedia/de/thumb/b/bb/Png-logo.png/800px-Png-logo.png"
-        picture_path = "landscape.jpg"
-        #weather_image['image'] = ImageTk.PhotoImage(Image.open(picture_path))
         weather_values = [temp, description, country, image_link]
         return weather_values
     except:
@@ -43,14 +41,16 @@ def display_weather_information():
         rounded_temp = round(weather[0])
         capitalize_description = str(weather[1])
         translated_descripton = GoogleTranslator(source='en', target='de').translate(capitalize_description)
-        #picture = urllib.request.urlretriever(image_link, savein)
-        #picture = Image.open(urllib.request.urlopen(image_link).read())
         temp_label.configure(text=str(rounded_temp) + ' ° C')
         city_label.configure(text= city_name.capitalize() + ', ' + weather[2])
         description_label.configure(text=translated_descripton.title())
-        #img = ImageTk.PhotoImage(Image.open("landscape.jpg"))
-        #weather_image.configure(image=img)
-
+        URL = weather[3]
+        u = urlopen(URL)
+        raw_data = u.read()
+        u.close()
+        path = ImageTk.PhotoImage(data=raw_data)
+        weather_image.configure(image=path)
+        weather_image.photo = path # anchor the image to the object.
 
     
 app = customtkinter.CTk()
@@ -68,8 +68,8 @@ city_search.pack(pady=10)
 city_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
 city_label.pack(pady=20)
 
-#weather_image = customtkinter.CTkLabel(app, image="")
-#weather_image.pack(pady=40)
+weather_image = customtkinter.CTkLabel(app, image="", text='')
+weather_image.pack(pady=40)
 
 temp_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
 temp_label.pack(pady=10)
