@@ -1,4 +1,7 @@
+from cgitb import text
 from importlib.resources import path
+from re import X
+from statistics import mode
 from deep_translator import GoogleTranslator
 import requests
 import urllib
@@ -10,9 +13,13 @@ import customtkinter
 import tkinter as tk
 import tkinter.messagebox
 from urllib.request import urlopen
+x = False
 
-customtkinter.set_appearance_mode("system") 
-customtkinter.set_default_color_theme("blue")  
+
+
+customtkinter.set_appearance_mode("dark") 
+customtkinter.set_default_color_theme("blue")
+
 
 
 def get_weather_information(city):
@@ -53,9 +60,24 @@ def display_weather_information():
         weather_image.photo = path # anchor the image to the object.
         
 
-def search_by_keys(self):
+def search_by_keys(event):
     display_weather_information()
-    
+
+
+def switch_mode():
+    global x
+    if x == False:
+        customtkinter.set_appearance_mode("light")
+        mode_switch.configure(text="Dark Mode") 
+        x = True
+    else:
+        customtkinter.set_appearance_mode("dark")
+        mode_switch.configure(text="Light Mode") 
+        x = False
+        
+        
+
+
 app = customtkinter.CTk()
 
 app.title('Wetter App')
@@ -80,6 +102,9 @@ weather_image.pack(pady=40)
 
 description_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 25))
 description_label.pack(pady=10)
+
+mode_switch = customtkinter.CTkButton(app, text="Light Mode", text_font=('Roboto', 12), command=switch_mode)
+mode_switch.pack(pady=20)
 
 
 app.mainloop()
