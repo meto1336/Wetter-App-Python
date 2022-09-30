@@ -48,6 +48,7 @@ def display_weather_information():
         raw_data = u.read()
         u.close()
         path = ImageTk.PhotoImage(data=raw_data)
+        path = path._PhotoImage__photo.zoom(2)
         weather_image.configure(image=path)
         weather_image.photo = path # anchor the image to the object.
         
@@ -58,26 +59,26 @@ def search_by_keys(self):
 app = customtkinter.CTk()
 
 app.title('Wetter App')
-app.geometry('600x400')
+app.geometry('800x600')
 app.resizable(False, False)
 
 city_entry = customtkinter.CTkEntry(app, width=150, height=30, placeholder_text="Stadt eingeben...")
 city_entry.bind('<Return>', search_by_keys)
-city_entry.pack(pady=20)
+city_entry.pack(pady=25)
 
 city_search = customtkinter.CTkButton(app, text='Suche Wetter', text_font=('Roboto', 12), command=display_weather_information)
 city_search.pack(pady=10)
 
-city_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
-city_label.pack(pady=20)
+city_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 25))
+city_label.pack(pady=25)
 
-temp_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
+temp_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 25))
 temp_label.pack(pady=10)
 
 weather_image = customtkinter.CTkLabel(app, image="", text='')
 weather_image.pack(pady=40)
 
-description_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
+description_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 25))
 description_label.pack(pady=10)
 
 
