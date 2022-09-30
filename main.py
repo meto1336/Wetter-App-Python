@@ -20,7 +20,6 @@ def get_weather_information(city):
     url = 'https://api.openweathermap.org/data/2.5/weather?q=' + city + '&units=metric&appid=' + api_key
     result = requests.get(url)
     data = result.json()
-    print(data)
     try:
         temp = data['main']['temp']
         icon = data['weather'][0]['icon']
@@ -51,7 +50,10 @@ def display_weather_information():
         path = ImageTk.PhotoImage(data=raw_data)
         weather_image.configure(image=path)
         weather_image.photo = path # anchor the image to the object.
+        
 
+def search_by_keys(self):
+    display_weather_information()
     
 app = customtkinter.CTk()
 
@@ -60,6 +62,7 @@ app.geometry('600x400')
 app.resizable(False, False)
 
 city_entry = customtkinter.CTkEntry(app, width=150, height=30, placeholder_text="Stadt eingeben...")
+city_entry.bind('<Return>', search_by_keys)
 city_entry.pack(pady=20)
 
 city_search = customtkinter.CTkButton(app, text='Suche Wetter', text_font=('Roboto', 12), command=display_weather_information)
@@ -68,11 +71,11 @@ city_search.pack(pady=10)
 city_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
 city_label.pack(pady=20)
 
-weather_image = customtkinter.CTkLabel(app, image="", text='')
-weather_image.pack(pady=40)
-
 temp_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
 temp_label.pack(pady=10)
+
+weather_image = customtkinter.CTkLabel(app, image="", text='')
+weather_image.pack(pady=40)
 
 description_label = customtkinter.CTkLabel(app, text='', text_font=('Roboto', 17))
 description_label.pack(pady=10)
